@@ -1,36 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <netdb.h>
-#include <errno.h>
-
-#define IPV4_LENGTH   16
-
-int main(int argc, char **argv)
-{
-    char *hostname;                  // ホストネーム
-    char ipv4[IPV4_LENGTH];          // IPアドレス
-
-    if(argc != 2)
-    {
-        fprintf(stderr, "Usage: %s [hostname]", argv[0]);
-        return -1;
-    }
-
-    hostname = argv[1];
-
-    resolve_host_ipv4(hostname, ipv4);
-
-    printf("%s: %s\n",hostname, ipv4);
-
-    return 0;
-}
+#include "myheader.h"
+#define ADDRESS_SIZE 4
 
 int resolve_host_ipv4(const char *hostname, char *ipv4)
 {
+    int i;
+    int ipaddr[ADDRESS_SIZE];
     struct hostent *host = NULL;    // ホスト情報
 
-    if ((hostname == NULL) || (ipv4 == NULL))
+    if (hostname == NULL)
     {
         return -1;  // 異常終了
     }
@@ -48,6 +25,13 @@ int resolve_host_ipv4(const char *hostname, char *ipv4)
         return -1;  // 異常終了
     }
 
-    sprintf(ipv4, "%d.%d.%d.%d", (unsigned char)*((host->h_addr_list[0])), (unsigned char)*((host->h_addr_list[0] + 1)), (unsigned char)*((host->h_addr_list[0] + 2)), (unsigned char)*((host->h_addr_list[0] + 3)));
+    for (i = 0; i < ADDRESS_SIZE; i++)
+    {
+        ipaddr[i] = (int)((unsigned char)*(host->h_addr_list[0] + i));
+    }
+
+    sprintf(ipv4, "%d.%d.%d.%d", ipaddr[0], ipaddr[1], ipaddr[2], ipaddr[3]);
+
+//    sprintf(ipv4, "%d.%d.%d.%d", (int)((unsigned char)*((host->h_addr_list[0]))), (int)((unsigned char)*((host->h_addr_list[0] + 1))), (int)((unsigned char)*((host->h_addr_list[0] + 2))), (int)((unsigned char)*((host->h_addr_list[0] + 3))));
     return 0;   // 正常終了
 }
