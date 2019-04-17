@@ -11,6 +11,8 @@
 #include <arpa/inet.h>      // struct sockaddr_in, struct sockaddr, inet_ntoa(), inet_aton() 
 #include <unistd.h>         // close()
 #include <netdb.h>          // gethostbyname()
+#include <openssl/ssl.h>    // openssl
+#include <openssl/err.h>    // openssl error
 #endif
 
 #ifdef __WIN32

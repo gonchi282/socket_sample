@@ -2,6 +2,8 @@
 
 int main(int argc, char *argv[]){
 
+    SSL *ssl;                           // SSL
+    SSL_CTX *ctx;                       // SSL_CTX
     REQUEST req;                        // リクエスト
     int sock;                           // socketディスクリプタ
     int status;                         // 変数ステータス
