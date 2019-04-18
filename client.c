@@ -55,15 +55,17 @@ int main(int argc, char *argv[]){
         exit(EXIT_FAILURE);
     }
 
-    // 
+    // ネットワーク数を文字列にする
     printf("connect to %s\n", inet_ntoa(servSockAddr.sin_addr));
 
-    strcpy(req.host, hostname);
-    strcpy(req.path, "index.html");
+    strcpy(req.host, hostname);     // リクエスト構造体にホストネームを設定する
+    strcpy(req.path, "index.html"); // リクエスト構造体にリクエストパスを設定する
 
-    send_request(sock, &req, COMMAND);
+    // リクエスト送信
+    send_request(sock, &req, METHOD);
     send_request(sock, &req, HOST);
 
+    // レスポンス受信
     totalBytesRcvd = 0;
     while(totalBytesRcvd < MAX_MSGSIZE){
         if((byteRcvd = recv(sock, recvBuffer, MSGSIZE, 0)) > 0){
@@ -87,13 +89,14 @@ int main(int argc, char *argv[]){
 }
 /* url: https://qiita.com/tajima_taso/items/fb5669ddca6e4d022c15/ */
 
+// リクエスト送信
 int send_request(int sock, REQUEST* req, REQTYPE reqtype)
 {
     char sendBuffer[MSGSIZE];
 
     switch(reqtype)
     {
-    case COMMAND:
+    case METHOD:
         sprintf(sendBuffer, "GET /%s HTTP/1.1\r\n", req->path);
         break;
     case HOST:

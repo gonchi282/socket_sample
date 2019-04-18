@@ -25,6 +25,7 @@
 #define IPSIZE  16
 #define HOSTNAMESIZE 256
 
+// リクエスト構造体
 typedef struct Request
 {
     char path[MSGSIZE]; // 取得ファイルパス
@@ -37,16 +38,29 @@ typedef struct Request
     char accept_language[MSGSIZE];  // ブラウザが予期している言語
 }REQUEST; 
 
+// リクエストメッセージ構造体
+typedef struct ReqMessage
+{
+    int alloc_size;     // データサイズ
+    char *data;         // データ
+}REQMESSAGE;
+
+// リクエストタイプ
 typedef enum Reqtype
 {
-    COMMAND = 0,
-    HOST,
-    USERAGENT,
-    CONTENTTYPE,
+    METHOD = 0,        // メソッド
+    HOST,               // ホストネーム
+    USERAGENT,          // ユーザーエージェント
+    CONTENTTYPE,        // コンテントタイプ
 }REQTYPE;
+
 
 // 関数のプロトタイプ宣言
 int resolve_host_ipv4(const char *, char *);
 int send_request(int, REQUEST*, REQTYPE);
+
+int set_reqmessage(REQMESSAGE *, const char *);
+int destroy_reqmessage_data(REQMESSAGE *);
+int destroy_reqmessage(REQMESSAGE *);
 
 #endif
